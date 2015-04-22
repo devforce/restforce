@@ -21,16 +21,20 @@ module Restforce
       # When passed a hash, it will determine what class is appropriate to
       # represent the data.
       def klass(val)
-        if val.has_key? 'records'
+        if val.key? 'records'
           # When the hash has a records key, it should be considered a collection
           # of sobject records.
           Restforce::Collection
-        elsif val.has_key? 'attributes'
-          if val['attributes']['type'] == 'Attachment'
-            Restforce::Attachment
-          else
-            # When the hash contains an attributes key, it should be considered an
-            # sobject record
+        elsif val.key? 'attributes'
+          begin
+            if val['attributes']['type'] == 'Attachment'
+              Restforce::Attachment
+            else
+              # When the hash contains an attributes key, it should be considered an
+              # sobject record
+              Restforce::SObject
+            end
+          rescue Exception => e # Workaround for Trailhead dashboard issue
             Restforce::SObject
           end
         else
