@@ -40,6 +40,7 @@ describe Restforce::Concerns::Streaming, event_machine: true do
         faye_double.should_receive(:set_header).with('Authorization', 'OAuth secret2')
         faye_double.should_receive(:bind).with('transport:down').and_yield
         faye_double.should_receive(:bind).with('transport:up').and_yield
+        faye_double.should_receive(:add_extension)
         subject
       end
     end
